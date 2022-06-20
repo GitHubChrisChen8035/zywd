@@ -6197,15 +6197,7 @@ loadjs.d("./app/exam/exam/question/types/answer/judgement/index", function (n, e
         },
         timeOutId: -1
     },
-    u = function () {
-        var n = this;
-        h({
-            clearIntervalWhenDevOpenTrigger: !0,
-            ondevtoolopen: function () {
-                return
-            }
-        })
-    },
+    
     s = function (n) {
         var e = this,
         a = n.isAllowSwitch;
@@ -7198,12 +7190,7 @@ loadjs.d("./app/exam/exam/question/types/answer/judgement/index", function (n, e
                         remainDuration: n.duration
                     })
                 },
-                closeWindow: function () {
-                    var n = this;
-                    n.app.message.alert("系统监测到您打开了开发者工具，请关闭考试页面，重新进入。", function () {
-                        window.opener ? (A.removeCloseListener(), window.close()) : (A.removeCloseListener(), n.app.viewport.hasModalOpen() && n.app.viewport.closeModal(), n.app.navigate("center/index"), window.location.reload())
-                    })
-                }
+                
             }
         }
     },
