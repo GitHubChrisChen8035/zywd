@@ -1,4 +1,4 @@
-eval(var questionsDic1 = {
+var questionsDic1 = {
     "7ea4ac7e-9b2d-43bc-a6cb-3f31ec3e202b": {
         "type": 1,
         "question": "5G的RRC层状态不包括以下哪个？",
@@ -90,4 +90,4 @@ function task(i) {
 			console.log("已完成自动答题，如有未完成题目，请手工完成");
 		}
    }, 2000 * i);
-})
+}
