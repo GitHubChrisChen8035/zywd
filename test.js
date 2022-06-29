@@ -2,6 +2,10 @@ try{var alt = document.getElementsByClassName("alertify alertify-show alertify-a
 
 try{var alt = document.getElementsByClassName("dialog animated")[0];alt.remove();}catch(error){}
 
+try{var alt = document.getElementsByClassName("modal auto")[0];alt.remove();}catch(error){}
+
+try{var alt = document.getElementsByClassName("dialog-overlay")[0];alt.remove();}catch(error){}
+
 try{removeEventListener("blur",getEventListeners(window).blur[0].listener);}catch(error){}
 
 //var examId = url.match(/(paper\/|question-|detail\/)([0-9a-zA-Z-]+)/)[2];
