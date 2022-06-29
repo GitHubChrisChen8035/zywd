@@ -598,7 +598,7 @@ function task(i,j) {
 }
 
 for (var i=0;i<questionNum;i++){
-	if(typeof(next) != "undefined"){
+	if(next){
 		task(i,0)
 	}else{
 		task(0,i)
