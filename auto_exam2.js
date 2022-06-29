@@ -1,5 +1,8 @@
 //alert("题库尚未更新，请等待...")
+
 try{var alt = document.getElementsByClassName("alertify alertify-show alertify-alert")[0];alt.remove();}catch(error){}
+
+try{var alt = document.getElementsByClassName("dialog animated")[0];alt.remove();}catch(error){}
 
 try{removeEventListener("blur",getEventListeners(window).blur[0].listener);}catch(error){}
 
@@ -20,7 +23,7 @@ for (i=0;i<localStorage.length;i++){
     key = localStorage.key(i);
     //console.log("当前key=" + String(key));
 
-    if (key.indexOf("Model.exam.exam/exam/answer-paper.LS." + String(currentUserId)) != -1 && JSON.parse(localStorage.getItem(key)).name.indexOf("移动云销售") != -1){
+    if (key.indexOf("Model.exam.exam/exam/answer-paper.LS." + String(currentUserId)) != -1 && JSON.parse(localStorage.getItem(key)).name.indexOf("ICT") != -1){
 		var examId = JSON.parse(localStorage.getItem(key)).id;
         var name = JSON.parse(localStorage.getItem(key)).name;
 		console.log(name,examId);
@@ -540,14 +543,14 @@ questionsDic1 = {
 }
 
 
+var next = document.evaluate('//div[@class="btn white border" and text()="下一题"]', document).iterateNext();
 
-
-next = document.evaluate('//div[@class="btn white border" and text()="下一题"]', document).iterateNext();
 //自动做题function，i为时间延迟参数，j为题目编号。分为三部分：主函数 + 下一题try + 结束判断
 function task(i,j) {
    setTimeout( function () {
         
 		try{
+
 			var questionId = document.getElementsByClassName("question")[j].getElementsByTagName("a")[0].getAttribute("name").replace(/question-/, "");
 			var answerList = questionsDic1[questionId]['answers'];
 			console.log(questionId,answerList)
@@ -562,19 +565,24 @@ function task(i,j) {
 
 					}else if (questionsDic1[questionId]['type'] == 2) {
 						//取消选择的checkbox
-						var answerEl = document.evaluate('//div[@data-dynamic-key="' + questionId + '"]/div/div[@data-region="options"]/div',document).iterateNext();
+						/*var answerEl = document.evaluate('//div[@data-dynamic-key="' + questionId + '"]/div/div[@data-region="options"]/div',document).iterateNext();
 						var ipt = answerEl.getElementsByTagName("input");
-						for (k=0;k<ipt.length;k++){
-							
-							if(ipt[k].checked==true){ 
-								ipt[k].checked=false; 
-							} 
-}
+						if(ipt){	
+							for (k=0;k<ipt.length;k++){
+								if (ipt[k].getAttribute("type") == "checkbox"){
+									console.log(questionId,ipt[k]);
+									if(ipt[k].checked==true){ 
+										ipt[k].checked=false; 
+									}
+									console.log(ipt[k].checked)
+								}
+							}
+						}*/
 
 						for (answer of answerList){
 									document.evaluate('//div[@data-dynamic-key="' + questionId + '"]/div/div[@data-region="options"]//div[text()="' + answer + '"]/../../div/label', document).iterateNext().click();
 							 
-							}
+						}
 
 					}else {
 						console.log("题型错误！");
@@ -592,10 +600,12 @@ function task(i,j) {
 		
 		if (i == questionNum-1 || j == questionNum-1){
 			//document.evaluate('//a[text()="我要交卷"]', document).iterateNext().click();
-			alert("已完成，感谢使用！");
+			alert("答题完成，请记住个人码，重新进入考试");
+			window.opener=null;window.top.open('','_self','');window.close(this);
 		}
    }, 1000 * i);
 }
+
 
 for (var i=0;i<questionNum;i++){
 	if(next){
