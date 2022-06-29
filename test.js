@@ -21,7 +21,7 @@ for (i=0;i<localStorage.length;i++){
     key = localStorage.key(i);
     //console.log("当前key=" + String(key));
 
-    if (key.indexOf("Model.exam.exam/exam/answer-paper.LS." + String(currentUserId)) != -1 && JSON.parse(localStorage.getItem(key)).name.indexOf("销售云") != -1){
+    if (key.indexOf("Model.exam.exam/exam/answer-paper.LS." + String(currentUserId)) != -1 && JSON.parse(localStorage.getItem(key)).name.indexOf("移动云") != -1){
 		var examId = JSON.parse(localStorage.getItem(key)).id;
         var name = JSON.parse(localStorage.getItem(key)).name;
 		console.log(name,examId);
