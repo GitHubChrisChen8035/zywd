@@ -13,7 +13,7 @@ for (i=0;i<localStorage.length;i++){
     key = localStorage.key(i);
     //console.log("当前key=" + String(key));
 
-    if (key.indexOf("Model.exam.exam/exam/answer-paper.LS." + String(currentUserId)) != -1 && JSON.parse(localStorage.getItem(key)).name.indexOf("ICT") != -1){
+    if (key.indexOf("Model.exam.exam/exam/answer-paper.LS." + String(currentUserId)) != -1 && JSON.parse(localStorage.getItem(key)).name.indexOf("2022年省级职工职业技能竞赛5G无线运维赛项复赛") != -1){
 		var examId = JSON.parse(localStorage.getItem(key)).id;
         var name = JSON.parse(localStorage.getItem(key)).name;
 		console.log(name,examId);
