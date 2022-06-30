@@ -1,3 +1,5 @@
+console.log("提示：脚本可用");
+
 var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
 console.log(auth);
 var req = new XMLHttpRequest();
