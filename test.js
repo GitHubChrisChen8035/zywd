@@ -101,7 +101,7 @@ function task(i,j) {
 			//document.evaluate('//a[text()="我要交卷"]', document).iterateNext().click();
 			//alert("答题完成，请记住个人码，重新进入考试");
 			//window.opener=null;window.top.open('','_self','');window.close();
-			document.getElementsByClassName("text-right")[0].getElementsByClassName("btn")[0].innerText = "我要交卷!";	
+			//document.getElementsByClassName("text-right")[0].getElementsByClassName("btn")[0].innerText = "我要交卷!";	
 			try{var alt1 = document.getElementsByClassName("dialog-overlay")[0];alt1.remove();}catch(error){}
 			try{var alt2 = document.getElementsByClassName("alertify-cover")[0];alt2.remove();}catch(error){}
 			alert("答题完成，感谢使用");
