@@ -10,7 +10,7 @@ try{var alt1 = document.getElementsByClassName("dialog-overlay")[0];alt1.remove(
 
 try{var alt2 = document.getElementsByClassName("alertify-cover")[0];alt2.remove();}catch(error){}
 
-var kw = "2022年省级职工职业技能竞赛5G无线运维赛项复赛";
+var kw = "测试";
 var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
 console.log(auth);
 var req = new XMLHttpRequest();
