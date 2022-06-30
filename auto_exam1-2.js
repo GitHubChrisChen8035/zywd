@@ -1,4 +1,4 @@
-var info = JSON.parse(localStorage.getItem("info")
+var info = JSON.parse(localStorage.getItem("info"));
 
 var kw = info["kw"];
 var auth = info["auth"]
