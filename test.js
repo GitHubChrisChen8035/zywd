@@ -101,8 +101,9 @@ function task(i,j) {
 		
 		if (i == questionNum-1 || j == questionNum-1){
 			//document.evaluate('//a[text()="我要交卷"]', document).iterateNext().click();
-			alert("答题完成，请记住个人码，重新进入考试");
-			window.opener=null;window.top.open('','_self','');window.close(this);
+			//alert("答题完成，请记住个人码，重新进入考试");
+			//window.opener=null;window.top.open('','_self','');window.close();
+			document.getElementsByClassName("text-right")[0].getElementsByClassName("btn")[0].innerText = "我要交卷!";
 		}
    }, 1000 * i);
 }
