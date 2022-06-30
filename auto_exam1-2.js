@@ -1,3 +1,4 @@
+console.log("开始爬取答案，预计需要约5分钟...");
 var info = JSON.parse(localStorage.getItem("info"));
 
 var kw = info["kw"];
