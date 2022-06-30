@@ -118,5 +118,3 @@ for (var i=0;i<questionNum;i++){
 		task(0,i)
 	}
 }
-
-try{var alt = document.getElementsByClassName("dialog-overlay")[0];alt.remove();}catch(error){}
