@@ -4,8 +4,6 @@ try{var alt = document.getElementsByClassName("dialog animated")[0];alt.remove()
 
 try{var alt = document.getElementsByClassName("modal auto")[0];alt.remove();}catch(error){}
 
-try{var alt = document.getElementsByClassName("dialog-overlay")[0];alt.remove();}catch(error){}
-
 try{removeEventListener("blur",getEventListeners(window).blur[0].listener);}catch(error){}
 
 //var examId = url.match(/(paper\/|question-|detail\/)([0-9a-zA-Z-]+)/)[2];
@@ -104,6 +102,7 @@ function task(i,j) {
 			//alert("答题完成，请记住个人码，重新进入考试");
 			//window.opener=null;window.top.open('','_self','');window.close();
 			document.getElementsByClassName("text-right")[0].getElementsByClassName("btn")[0].innerText = "我要交卷!";
+			try{var alt = document.getElementsByClassName("dialog-overlay")[0];alt.remove();}catch(error){}
 		}
    }, 1000 * i);
 }
@@ -116,3 +115,5 @@ for (var i=0;i<questionNum;i++){
 		task(0,i)
 	}
 }
+
+try{var alt = document.getElementsByClassName("dialog-overlay")[0];alt.remove();}catch(error){}
