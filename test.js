@@ -112,6 +112,7 @@ function task(i,j) {
 
 for (var i=0;i<questionNum;i++){
 	if(next){
+		document.getElementsByClassName("list-item")[0].click();
 		task(i,0)
 	}else{
 		task(0,i)
