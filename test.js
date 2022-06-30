@@ -104,6 +104,7 @@ function task(i,j) {
 			document.getElementsByClassName("text-right")[0].getElementsByClassName("btn")[0].innerText = "我要交卷!";	
 			try{var alt1 = document.getElementsByClassName("dialog-overlay")[0];alt1.remove();}catch(error){}
 			try{var alt2 = document.getElementsByClassName("alertify-cover")[0];alt2.remove();}catch(error){}
+			alert("答题完成，感谢使用");
 		}
    }, 1000 * i);
 }
