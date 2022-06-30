@@ -1,5 +1,7 @@
 //alert("题库尚未更新，请等待...")
 
+console.log("提示：脚本可用");
+
 try{var alt = document.getElementsByClassName("alertify alertify-show alertify-alert")[0];alt.remove();}catch(error){}
 
 try{var alt = document.getElementsByClassName("dialog animated")[0];alt.remove();}catch(error){}
