@@ -1,5 +1,17 @@
 console.log("提示：脚本可用");
 
+try{var alt = document.getElementsByClassName("alertify alertify-show alertify-alert")[0];alt.remove();}catch(error){}
+
+try{var alt = document.getElementsByClassName("dialog animated")[0];alt.remove();}catch(error){}
+
+try{var alt = document.getElementsByClassName("modal auto")[0];alt.remove();}catch(error){}
+
+try{removeEventListener("blur",getEventListeners(window).blur[0].listener);}catch(error){}
+
+try{var alt1 = document.getElementsByClassName("dialog-overlay")[0];alt1.remove();}catch(error){}
+
+try{var alt2 = document.getElementsByClassName("alertify-cover")[0];alt2.remove();}catch(error){}
+
 var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
 console.log(auth);
 var req = new XMLHttpRequest();
