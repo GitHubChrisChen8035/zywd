@@ -1,61 +1,42 @@
-//alert("题库尚未更新，请等待...")
+//auto_exam2.js
+try{
+	//移除开发者工具监测弹窗
+	var alt = document.getElementsByClassName("alertify alertify-show alertify-alert")[0];
+	if (typeof(alt) != "undefined"){alt.remove()};
+	//移除切屏次数弹窗
+	var alt1 = document.getElementsByClassName("dialog animated")[0];
+	if (typeof(alt1) != "undefined"){alt1.remove()};
+	//影响交卷功能！
+	var alt2 = document.getElementsByClassName("modal auto")[0];
+	if (typeof(alt2) != "undefined"){alt2.remove()};
+	//移除cover层，解除操作限制
+	var alt3 = document.getElementsByClassName("dialog-overlay")[0];
+	if (typeof(alt3) != "undefined"){alt3.remove()};
+	var alt4 = document.getElementsByClassName("alertify-cover")[0];
+	if (typeof(alt4) != "undefined"){alt4.remove()};
+	//移除切屏监听事件
+	removeEventListener("blur",getEventListeners(window).blur[0].listener);
+}catch(error){}
 
-console.log("提示：脚本可用");
+//更新答案集
+questionsDic1 = {"a228b422-924d-48fe-8457-914961143d8f":{"type":1,"question":"现网软件补丁装载后应有保修期，时限为（   ）。如因软件补丁装载在保修期内产生的故障、或需要实施新的补丁装载，厂商应提供免费服务，服务标准与售后服务标准一致。","answers":"14个自然天"},"45b9dc4a-cd2a-4b14-bcfb-1d82d4490488":{"type":1,"question":"投诉处理流程应当以(     )作为起点，将处理结果反馈客服部门作为终点。","answers":"省网管监控中心受理投诉"},"c5abbe4e-1f86-44a5-9295-353e3342d221":{"type":1,"question":"对于A级软件（修复故障隐患的缺陷补丁，落实全网工作要求和推动全网业务开通等的版本和功能补丁），总部网络部通过软件装载工单安排全网装载，省公司网络部门原则上应在(   )个月内及时完成软件装载工作。","answers":"3  "},"dd9ad196-d91a-4971-9652-0683af20b5b9":{"type":1,"question":"以下关于系统日志的说法，不正确的是（    ）","answers":"系统日志记录需进行定期备份，应至少保存一年，涉及客户敏感信息的操作日志应留存不少于三年。"},"9b8cb2dd-4c1e-42fc-b77e-fc3dbfb1de97":{"type":1,"question":"软件版本和补丁管理的范围是(    )","answers":"入网设备清单中的现网设备"},"aa865729-5716-4124-aae0-77cd30767446":{"type":1,"question":"机房安全出口应不少于(    )个，且要保持畅通，不可放置杂物。","answers":"2 "},"3cb1e52c-0431-434f-b6ee-e810916198e1":{"type":1,"question":"根据网络安全服务可控相关要求，以下关于安全评估的说法正确的是（    ）","answers":"以上都正确"},"490d521d-44a1-4330-b45f-32bbce1e911b":{"type":1,"question":"应急预案体系按照责任单位划分，分为( )级.","answers":"4 "},"e8c59201-cc15-4a0d-9334-f6004cfd6b5f":{"type":1,"question":"遵照《中国移动网络运行维护规程》的要求，对于重要的网络调整局数据方案（如涉及网元多、可能影响重要业务或导致重大故障等）应获得省公司领导（  ）的授权批准.","answers":"一级经理 "},"d06ff2a2-2b4c-4ba2-b86c-74fee7dd9bb2":{"type":1,"question":"客户信息安全管理采取( )管理的方式，各单位应明确客户信息安全归口管理部门。","answers":"归口 "}}
 
-try{var alt = document.getElementsByClassName("alertify alertify-show alertify-alert")[0];alt.remove();}catch(error){}
-
-try{var alt = document.getElementsByClassName("dialog animated")[0];alt.remove();}catch(error){}
-
-try{var alt = document.getElementsByClassName("modal auto")[0];alt.remove();}catch(error){}
-
-try{var alt1 = document.getElementsByClassName("dialog-overlay")[0];alt1.remove();}catch(error){}
-
-try{var alt2 = document.getElementsByClassName("alertify-cover")[0];alt2.remove();}catch(error){}
-
-try{removeEventListener("blur",getEventListeners(window).blur[0].listener);}catch(error){}
-
-//var examId = url.match(/(paper\/|question-|detail\/)([0-9a-zA-Z-]+)/)[2];
-//var examId = document.location.href.match(/(paper\/|question-|detail\/)([0-9a-zA-Z-]+)/)[2];
-//console.log(examId);
-var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
-console.log(auth);
-var req = new XMLHttpRequest();
-req.open(
-  "GET","/api/v1/system/setting/frontend?_=" + new Date().getTime(),false
-);
-req.setRequestHeader("Authorization", auth);
-req.send(null);
-res = JSON.parse(req.responseText);
-currentUserId = res.currentUser.id;
-for (i=0;i<localStorage.length;i++){
-    key = localStorage.key(i);
-    //console.log("当前key=" + String(key));
-
-    if (key.indexOf("Model.exam.exam/exam/answer-paper.LS." + String(currentUserId)) != -1 && JSON.parse(localStorage.getItem(key)).name.indexOf("在线自测") != -1){
-		var examId = JSON.parse(localStorage.getItem(key)).id;
-        var name = JSON.parse(localStorage.getItem(key)).name;
-		console.log(name,examId);
-		break;
+//JS原生xpath选择，document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null)，返回的是枚举类型，需要逐个取出
+function Xpath(xpath){
+	var xresult = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
+	var xnodes = [];
+	var xres;
+	while(xres = xresult.iterateNext()){
+		xnodes.push(xres);
 	}
+	return xnodes;
+
 }
-key = "Model.exam.exam/exam/answer-paper.LS." + currentUserId + "." + examId;
-value = JSON.parse(localStorage.getItem(key));
-var recordId = value.examRecord.id;
-console.log(recordId);
-var paperId = value.examRecord.paperInstanceId;
-console.log(paperId);
-var questionNum = value.paper.questionNum;
-console.log(questionNum);
-
-questionsDic1 = {"7a9179cc-c10c-482c-b06b-c44b7788dc91":{"type":1,"question":"业务中台是（）的能力封装","answers":"场景化"},"f5a68bc7-d52a-40e4-b88a-3bbb782ae2aa":{"type":1,"question":"业务中台建设六步法，依次是（）。","answers":"场景梳理、业务设计、服务设计、能力打造、能力沉淀、编排开放"},"a64ab243-595c-4064-b266-8ac7390c3c30":{"type":1,"question":"智慧赋能是指锻造产品的智慧化投放能力，丰富（）数据营销能力","answers":"千人千面"},"61fbaca6-a53e-4738-a494-f9b954d0f92f":{"type":3,"question":"破冰行动任务通过应用推广破冰、组织机制破冰，打造标杆应用，健全应用战队工作模式，强化管建战协同，探索将技术中台纳入对内对外常态化生产流程","answers":"正确"},"9f99ca8d-66b1-4767-8360-49a86e880e86":{"type":3,"question":"云边协同架构中集中化节点负责储算任务和数据的集中管控","answers":"正确"},"e04ee5d9-7fb7-45d2-8e20-8310ec3ba447":{"type":1,"question":"符合智慧中台能力治理双平面特点的是","answers":"控制与流量分离"},"4095e266-d109-41ef-822d-87eeac8d62b0":{"type":1,"question":"不是AMG的主要功能是","answers":"全网路由数据管理"},"339cd9ca-18c6-4d30-8cee-d5bc3b5c76f0":{"type":1,"question":"下列哪个选项不属于统一门户前端展示区的频道（   ）","answers":"能力评价"},"d7995dce-419c-47c8-ac06-533e0dda75c2":{"type":1,"question":"智慧中台统一门户目前已经面向什么人员进行开放（   ）（）","answers":"集团内部全体员工"},"5904c9a9-ce1d-46a1-8d01-4386a5dd5b3e":{"type":1,"question":"数据中台是（）","answers":"全网一个数据中台"},"a8a97fc7-f22f-467d-a89d-ed138ccac29b":{"type":1,"question":"数据中台技术规划，将加强大数据核心能力的（），实现大数据技术从跟随到引领","answers":"自主掌控"},"198441a4-e3bf-4388-bd39-a3cb72cc2cfb":{"type":1,"question":"以下属于DaaS服务模式的是（）","answers":"API接口"},"c440d8e0-7981-4b1b-b4e6-d577f73cba88":{"type":2,"question":"业务中台是对业务支撑能力解耦整合，沉淀（）的业务能力","answers":["标准化","可复用","可共享"]},"8e49b7da-e73b-440c-87c0-a7ec1f9cecb9":{"type":3,"question":"能力使用者只能从固定的AMG调用某项中台能力","answers":"错误"},"8a4bf6c8-e36a-4829-8ee5-cd3edbc2d8b3":{"type":2,"question":"攻坚行动指的是通过（   ），提升能力水平、打通敏捷高效运营流程","answers":["能力汇聚攻坚","高效运营攻坚"]},"1e641a70-1735-46ad-8b91-0be5220fc2a2":{"type":1,"question":"智慧中台发展的三个阶段，逐步推进的顺序（）。","answers":"一体化运营、数智化运营、生态化运营"},"92bceedc-bddc-4bd1-b89b-523e1b29f91c":{"type":1,"question":"\"AaaS\"的全称中文解释为：","answers":"能力即服务"},"6cc78c45-6480-41e3-a71a-65e2b47180dd":{"type":1,"question":"智慧中台统一运营体系在（）指引下，通过运营释放能力价值，以（）为核心基础，以（）为流程运转的运营枢纽，以组织协同化、管理规范化、运营一体化、配套系统化为（），不断打通堵点、解决冲突、顺畅流转，全方位实现统一、协同、高效的智慧中台运营体系。","answers":"统一战略、三台能力、统一门户、四个抓手"},"c198cb19-2f4f-4ce5-8fb5-f7d063875890":{"type":1,"question":"面向前台，智慧中台首先要做好（   ）角色，其次要做好（   ）角色，推动业务过程、工作过程、服务过程的数字化、数据化。","answers":"服务员；教练员"},"11d1f640-e836-49cf-88da-85c2f7d9295d":{"type":1,"question":"智慧中台运营效能评价模型包含，客户成功、从1到N、和（   ）","answers":"数智提效"},"457ede5f-5184-47a6-941a-d4b735e8e9bb":{"type":1,"question":"为理顺各角色关系，加强组织协同，构建“三横三纵三维”集、省、专协同的智慧中台运营架构。下列选项中，有关“三横三纵三维”的说法正确的是（   ）","answers":"“三纵”是覆盖全域、全渠道的三台一体化运营"},"98edc425-6a37-49c1-9ffb-eae44c1d7188":{"type":1,"question":"智慧中台统一运营管控的“315”质量保障要素中，“3”码指的是（   ）","answers":"场景编码、能力编码、服务编码"},"5f66f34b-8b3a-45ad-a283-6100c800972a":{"type":1,"question":"技术中台的构建理念是（   ）","answers":"开门建中台"},"7635091f-4dd8-4541-9f09-1f30925e603b":{"type":1,"question":"（   ）能力指的是内部需求方广泛引用了外部能力，自建能力尚未成为服务需求的主力军，或内部特色能力未规模化，如漏洞检测、高精度定位等","answers":"发展型能力"},"aaed44c6-8e9a-47e0-b64b-7c8a110c84b3":{"type":1,"question":"推广模式-能力带应用，指的是基于中台能力，与需求方挖掘可复用、引入增益大的业务场景，实现从（ ）到（ ）的快速应用落地","answers":"0 1"},"a9d96b72-3815-42ac-8a9f-c653c7158120":{"type":3,"question":"智慧中台是全集团各单位可开放、可共享能力的集合，全集团有多个智慧中台。","answers":"错误"},"5cfee1a3-17c7-459a-a924-034070da3c9a":{"type":2,"question":"“智慧中台能力使用者、能力提供者，各方都能够有贡献有付出、有获益有回馈。”这句话中，提到的是统一门户的哪个模块（   ）","answers":["能力考核","能力结算"]},"4acbfc71-619f-43d2-919c-6a6c81b89411":{"type":3,"question":"中台能力从构建就基于统一云原生架构，形成共平台、共能力、共研发的技术体系，降低应用能力开发难度，缩短技术研发交付周期，最大化发挥出“云”的价值。","answers":"正确"},"d23800eb-3cfb-4bb4-8e61-aa1486addfed":{"type":2,"question":"持续推进中台能力构建和运营对内，提升了整体运营和创新效能，主要体现在哪方面？","answers":["推动能力自主可控","提升企业运营效率","赋能数智化创新","敏捷支撑业务发展"]},"377234ea-5fee-450e-b043-37ea8c811b66":{"type":2,"question":"数据中台组织方式遵循（）","answers":["共建共享","多方参与","三边原则"]}}
-
-
-var next = document.evaluate('//div[@class="btn white border" and text()="下一题"]', document).iterateNext();
 
 //自动做题function，i为时间延迟参数，j为题目编号。分为三部分：主函数 + 下一题try + 结束判断
 function task(i,j) {
    setTimeout( function () {
-        
+		
 		try{
 
 			var questionId = document.getElementsByClassName("question")[j].getElementsByTagName("a")[0].getAttribute("name").replace(/question-/, "");
@@ -72,56 +53,90 @@ function task(i,j) {
 
 					}else if (questionsDic1[questionId]['type'] == 2) {
 						//取消选择的checkbox
-						/*var answerEl = document.evaluate('//div[@data-dynamic-key="' + questionId + '"]/div/div[@data-region="options"]/div',document).iterateNext();
-						var ipt = answerEl.getElementsByTagName("input");
-						if(ipt){	
-							for (k=0;k<ipt.length;k++){
-								if (ipt[k].getAttribute("type") == "checkbox"){
-									console.log(questionId,ipt[k]);
-									if(ipt[k].checked==true){ 
-										ipt[k].checked=false; 
-									}
-									console.log(ipt[k].checked)
-								}
-							}
-						}*/
+						//document.evaluate('//a[contains(@id,"' + questionId + '")]', document).iterateNext().style.backgroundColor="#32CD32";
+						var answers = Xpath('//div[@data-dynamic-key="' + questionId + '"]/div/div[@data-region="options"]/div//input[@type="checkbox"]');
 
-						for (answer of answerList){
-									document.evaluate('//div[@data-dynamic-key="' + questionId + '"]/div/div[@data-region="options"]//div[text()="' + answer + '"]/../../div/label', document).iterateNext().click();
-							 
+						if (answers[0]) {
+							for (ans of answers){ans.checked=false;} 
 						}
+						
+						//必须先反选，再延迟选择正确答案。猜测是正确答案click后，会更新checkbox，导致之前的反选操作失效
+						setTimeout(function (){
+							for (var answer of answerList){
+									document.evaluate('//div[@data-dynamic-key="' + questionId + '"]/div/div[@data-region="options"]//div[text()="' + answer + '"]/../../div/label', document).iterateNext().click();
+							}	 
+						},100)
 
 					}else {
 						console.log("题型错误！");
 					}
+					/*左侧list-item改变背景颜色为淡绿。需延迟生效，否则Xpath获取不到元素。原因为：list-item实时监测答案选择情况（已选/未选），并更新元素。无法实现除了“待检查”外的标记，因为元素都是通过XHR从后台获取显示*/
+
+
 				
 		}catch(error){
 			console.log("本题无答案")
+			//通过点击“待检查”标识无答案题目
+			setTimeout(window.onload = function (){
+				var item = Xpath('//a[contains(@id,"waiting-check-' + questionId + '")]')[0];  
+				if (item){item.click();}
+			},1000)
 		}
 		
 		try{
 			document.evaluate('//div[@class="btn white border" and text()="下一题"]', document).iterateNext().click();
-		}catch(error){
-			console.log("");
-		}
+		}catch(error){}
 		
 		if (i == questionNum-1 || j == questionNum-1){
-			//document.evaluate('//a[text()="我要交卷"]', document).iterateNext().click();
 			//alert("答题完成，请记住个人码，重新进入考试");
-			//window.opener=null;window.top.open('','_self','');window.close(this);
+			//window.opener=null;window.top.open('','_self','');window.close();
 			//document.getElementsByClassName("text-right")[0].getElementsByClassName("btn")[0].innerText = "我要交卷!";	
-
 			alert("答题完成，感谢使用");
+			console.log("答题完毕，感谢使用");
+			
 		}
    }, 1000 * i);
 }
 
+if(Object.keys(questionsDic1).length > 0){
+	var name = document.getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ","");
+	console.log(name + "  开始答题...");
+	var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
+	console.log(auth);
+	var req = new XMLHttpRequest();
+	req.open(
+	  "GET","/api/v1/system/setting/frontend?_=" + new Date().getTime(),false
+	);
+	req.setRequestHeader("Authorization", auth);
+	req.send(null);
+	res = JSON.parse(req.responseText);
+	currentUserId = res.currentUser.id;
+	for (i=0;i<localStorage.length;i++){
+		key = localStorage.key(i);
+		//console.log("当前key=" + String(key));
 
-for (var i=0;i<questionNum;i++){
-	if(next){
-		document.getElementsByClassName("list-item")[0].click();
-		task(i,0)
-	}else{
-		task(0,i)
+		if (key.indexOf("Model.exam.exam/exam/answer-paper.LS." + String(currentUserId)) != -1 && JSON.parse(localStorage.getItem(key)).name.indexOf(name) != -1){
+			var examId = JSON.parse(localStorage.getItem(key)).id;
+			var name = JSON.parse(localStorage.getItem(key)).name;
+			console.log(name,examId);
+			break;
+		}
 	}
+	key = "Model.exam.exam/exam/answer-paper.LS." + currentUserId + "." + examId;
+	value = JSON.parse(localStorage.getItem(key));
+	var questionNum = value.paper.questionNum;
+	console.log(questionNum);
+	var next = document.evaluate('//div[@class="btn white border" and text()="下一题"]', document).iterateNext();
+
+	for (var i=0;i<questionNum;i++){
+		if(next){
+			try{document.getElementsByClassName("list-item")[0].click();}catch(error){}
+			task(i,0)
+		}else{
+			task(0,i)
+		}
+	}
+}else{
+	console.log("题库尚未更新！")
+	alert("题库尚未更新！")
 }
