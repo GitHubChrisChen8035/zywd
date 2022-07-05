@@ -17,63 +17,64 @@ try{
 	removeEventListener("blur",getEventListeners(window).blur[0].listener);
 }catch(error){}
 //获取考试title，直接获取name，一方面会报错，另外它是string而非undefined类型
-var title = document.getElementsByClassName("head-info inline-block")[0].getElementsByClassName("title text-overflow")[0];
+try{
+	var name = document.getElementsByClassName("head-info inline-block")[0].getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ","");
+	console.log("name=" + name);
+	console.log("缓存考试info...")
+	var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
+	console.log(auth);
+	var req = new XMLHttpRequest();
+	req.open(
+	  "GET","/api/v1/system/setting/frontend?_=" + new Date().getTime(),false
+	);
+	req.setRequestHeader("Authorization", auth);
+	req.send(null);
+	res = JSON.parse(req.responseText);
+	currentUserId = res.currentUser.id;
 
-if (typeof(title) != "undefined"){
-	    var name = title.innerText.replace("正在作答: ","");
-        console.log("name=" + name);
-		console.log("缓存考试info...")
-		var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
-		console.log(auth);
-		var req = new XMLHttpRequest();
-		req.open(
-		  "GET","/api/v1/system/setting/frontend?_=" + new Date().getTime(),false
-		);
-		req.setRequestHeader("Authorization", auth);
-		req.send(null);
-		res = JSON.parse(req.responseText);
-		currentUserId = res.currentUser.id;
+	for (i=0;i<localStorage.length;i++){
+		key = localStorage.key(i);
 
-		for (i=0;i<localStorage.length;i++){
-			key = localStorage.key(i);
-
-			if (key.indexOf("Model.exam.exam/exam/answer-paper.LS." + String(currentUserId)) != -1 && JSON.parse(localStorage.getItem(key)).name.indexOf(name) != -1){
-				var examId = JSON.parse(localStorage.getItem(key)).id;
-				var name = JSON.parse(localStorage.getItem(key)).name;
-				console.log(name,examId);
-				break;
-			}
+		if (key.indexOf("Model.exam.exam/exam/answer-paper.LS." + String(currentUserId)) != -1 && JSON.parse(localStorage.getItem(key)).name.indexOf(name) != -1){
+			var examId = JSON.parse(localStorage.getItem(key)).id;
+			var name = JSON.parse(localStorage.getItem(key)).name;
+			console.log(name,examId);
+			break;
 		}
-		key = "Model.exam.exam/exam/answer-paper.LS." + currentUserId + "." + examId;
-		value = JSON.parse(localStorage.getItem(key));
-		var recordId = value.examRecord.id;
-		console.log(recordId);
-		var paperId = value.examRecord.paperInstanceId;
-		console.log(paperId);
-		var questionNum = value.paper.questionNum;
-		console.log(questionNum);
-		var questionsCopy = value.paper.questions;
-		console.log(questionsCopy);
-		//写入浏览器缓存
-		var info = {};
+	}
+	key = "Model.exam.exam/exam/answer-paper.LS." + currentUserId + "." + examId;
+	value = JSON.parse(localStorage.getItem(key));
+	var recordId = value.examRecord.id;
+	console.log(recordId);
+	var paperId = value.examRecord.paperInstanceId;
+	console.log(paperId);
+	var questionNum = value.paper.questionNum;
+	console.log(questionNum);
+	var questionsCopy = value.paper.questions;
+	console.log(questionsCopy);
+	//写入浏览器缓存
+	var info = {};
 
-		info["name"] = name;
-		info["auth"] = auth;
-		info["currentUserId"] = currentUserId;
-		info["examId"] = examId;
-		info["recordId"] = recordId;
-		info["paperId"] = paperId;
-		info["questionNum"] = questionNum;
-		info["questionsCopy"] = questionsCopy;
+	info["name"] = name;
+	info["auth"] = auth;
+	info["currentUserId"] = currentUserId;
+	info["examId"] = examId;
+	info["recordId"] = recordId;
+	info["paperId"] = paperId;
+	info["questionNum"] = questionNum;
+	info["questionsCopy"] = questionsCopy;
 
-		localStorage.setItem("info",JSON.stringify(info));
-		console.log("考试信息缓存完毕！")
+	localStorage.setItem("info",JSON.stringify(info));
+	console.log("考试信息缓存完毕！")
 
-	
-}else{
+}
+//大部分catch error的情况，是未发现name，即不在考试页	
+catch(error){
 	
 	var info = JSON.parse(localStorage.getItem("info"));
-	if (typeof(info) != "undefined"){
+	//如果浏览器缓存没有info，那么info==null，typeof=="object"，所以不能用"undefined"来判断，直接用if(info)即可
+	//if (typeof(info) != "undefined"){
+	if (info){
 		console.log("开始爬取答案...")
 		var name = info["name"];
 		var auth = info["auth"]
@@ -227,5 +228,4 @@ if (typeof(title) != "undefined"){
 	}else{
 		console.log("考试信息info未建立！")
 	}
-	
 }
