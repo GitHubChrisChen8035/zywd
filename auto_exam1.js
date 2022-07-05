@@ -17,7 +17,7 @@ try{
 	removeEventListener("blur",getEventListeners(window).blur[0].listener);
 }catch(error){}
 //获取考试title，直接获取name，一方面会报错，另外它是string而非undefined类型
-var title = document.getElementsByClassName("title text-overflow")[0];
+var title = document.getElementsByClassName("head-info inline-block")[0].getElementsByClassName("title text-overflow")[0];
 
 if (typeof(title) != "undefined"){
 	    var name = title.innerText.replace("正在作答: ","");
