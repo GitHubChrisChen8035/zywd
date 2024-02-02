@@ -122,7 +122,7 @@ console.log(questionNum);
         console.log("reload..");
     };
     //点击"我要交卷",刷新当前页面
-    document.getElementsByClassName("text-right")[0].getElementsByClassName("btn")[0].addEventListener("click", reload);
+    //document.getElementsByClassName("text-right")[0].getElementsByClassName("btn")[0].addEventListener("click", reload);
 
 } else {
     console.log("题库尚未更新！")
