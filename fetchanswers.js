@@ -126,19 +126,14 @@ catch(error){
 		function score(questionId, answer) {
 		  xhr1 = new XMLHttpRequest();
 		  var xhrurl1 = "/api/v1/exam/exam-record/front/submitPaper";
-		  var xhrdata1 =
-			"examId=" + examId + "&examRecordId=" + recordId + "&submitType=Hand&answerRecords=%5B%7B%22questionId%22%3A%22" + questionId + "%22%2C%22answer%22%3A%22" + encodeURIComponent(answer) + "%22%7D%5D&fullAnswerRecords=%5B%7B%22questionId%22%3A%22" + questionId +
-			"%22%2C%22answer%22%3A%22" + encodeURIComponent(answer) + "%22%7D%5D&clientType=1&lastCacheTime=" + String(new Date().getTime()) +
-			"&submitDetailType=2&clientVersion=Chrome%2F74.0.3729.169&noAnswerCount=" + (questionNum - 1) + "&answeredCount=1";
+		  var xhrdata1 = "examId=" + examId + "&examRecordId=" + recordId + "&submitType=Hand&answerRecords=%5B%7B%22questionId%22%3A%22" + questionId + "%22%2C%22answer%22%3A%22" + encodeURIComponent(answer) + "%22%7D%5D&fullAnswerRecords=%5B%7B%22questionId%22%3A%22" + questionId + "%22%2C%22answer%22%3A%22" + encodeURIComponent(answer) + "%22%7D%5D&clientType=1&lastCacheTime=" + String(new Date().getTime()) + "&submitDetailType=2&clientVersion=Chrome%2F74.0.3729.169&noAnswerCount=" + (questionNum - 1) + "&answeredCount=1";
 		  xhr1.open("POST", xhrurl1, false);
 		  xhr1.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		  xhr1.setRequestHeader("Authorization", auth);
 		  xhr1.send(xhrdata1);
 		  xhr2 = new XMLHttpRequest();
 		  var xhrurl2 = "/api/v1/exam/exam-record/score";
-		  var xhrdata2 =
-			"examId=" + examId + "&examRecordId=" + recordId + "&paperInstanceId=" + paperId + "&fullAnswerRecords=%5B%7B%22questionId%22%3A%22" +
-			questionId + "%22%2C%22answer%22%3A%22" + encodeURIComponent(answer) + "%22%7D%5D";
+		  var xhrdata2 = "examId=" + examId + "&examRecordId=" + recordId + "&paperInstanceId=" + paperId + "&fullAnswerRecords=%5B%7B%22questionId%22%3A%22" +	questionId + "%22%2C%22answer%22%3A%22" + encodeURIComponent(answer) + "%22%7D%5D";
 		  xhr2.open("POST", xhrurl2, false);
 		  xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		  xhr2.setRequestHeader("Authorization", auth);
@@ -158,7 +153,7 @@ catch(error){
 					for (var j = 0; j < questionsCopy[i]["questionAttrCopys"].length; j++){
 						
 						if (score(questionsCopy[i]["id"], questionsCopy[i]["questionAttrCopys"][j]["name"])){
-							
+							//对于question以及answers本身包含引号的，可能需要str.replace(/"/g, '\\"')来进行转义，当前未测试过
 							questionsDic1[questionsCopy[i]["id"]] = {"type":1,"question":questionsCopy[i]["content"],"answers":questionsCopy[i]["questionAttrCopys"][j]["value"]};
 							break;
 							
