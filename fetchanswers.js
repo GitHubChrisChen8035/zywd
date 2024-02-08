@@ -153,7 +153,7 @@ catch(error){
 					for (var j = 0; j < questionsCopy[i]["questionAttrCopys"].length; j++){
 						
 						if (score(questionsCopy[i]["id"], questionsCopy[i]["questionAttrCopys"][j]["name"])){
-							//对于question以及answers本身包含引号的，可能需要str.replace(/"/g, '\\"')来进行转义，当前未测试过
+							//对于question以及answers本身包含引号的，可能需要str.replace(/"/g, '\\"')来进行转义，包括其他如\n换行符等！
 							questionsDic1[questionsCopy[i]["id"]] = {"type":1,"question":questionsCopy[i]["content"],"answers":questionsCopy[i]["questionAttrCopys"][j]["value"]};
 							break;
 							
