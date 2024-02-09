@@ -10,7 +10,7 @@ try {
 
 //更新答案集
 var questionsDic1 = `
-{"2d95fd71-cced-4981-b810-fb8e5e387fa8":{"type":31,"question":"以下说法是否正确：为规范和对讲业务，和对讲平台不支持线下为客户开通商用。","answers":"正确"},"a9be0d2c-784f-4d1e-8cf1-3a7b177bbc01":{"type":13,"question":"和办公超级会议每月向团队成员免费赠送（）分钟使用时长。","answers":"500"},"cb2fbae7-c862-4dc0-b2fd-a8d0816616b2":{"type":112121,"question":"中国移动智慧校园平台"基于"哪种云平台架构设计？（）","answers":"混合云"}}
+{"2d95fd71-cced-4981-b810-fb8e5e387fa8":{"type":31,"question":"以下说法是否正确：为规范和对讲业务，和对讲平台不支持线下为客户开通商用。","answers":"正确"},"a9be0d2c-784f-4d1e-8cf1-3a7b177bbc01":{"type":13,"question":"和办公超级会议每月向团队成员免费赠送 （）分钟使用时长。","answers":"500"},"cb2fbae7-c862-4dc0-b2fd-a8d0816616b2":{"type":112121,"question":"中国移动智慧校园平台"基于"哪种云平台架构设计？（）","answers":"混合云"}}
 `
 function escapeSpecialQuotes(jsonString) {
   // 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）
