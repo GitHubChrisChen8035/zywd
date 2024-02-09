@@ -21,9 +21,9 @@ function escapeSpecialQuotes(jsonString) {
 
 
 // 调用函数处理字符串
-var questionsDic = escapeSpecialQuotes(questionsDic1.toString());
+var questionsDic = escapeSpecialQuotes(questionsDic1);
 
-console.log(questionsDic);
+console.log(JSON.parse(questionsDic));
 
 
 //JS原生xpath选择，document.evaluate返回的是枚举类型，需要逐个取出
