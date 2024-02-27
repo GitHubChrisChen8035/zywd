@@ -15,14 +15,14 @@ var questionsDic1 = `
 function escapeSpecialQuotes(jsonString) {
   // 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）
   // 并保留这些字符不变，同时转义其他情况下的双引号
-  return jsonString.replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"');
+  return JSON.parse(jsonString.replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"'));
 }
 
 
 // 调用函数处理字符串
 var questionsDic = escapeSpecialQuotes(questionsDic1);
 
-console.log(JSON.parse(questionsDic));
+console.log(questionsDic);
 
 
 //JS原生xpath选择，document.evaluate返回的是枚举类型，需要逐个取出
