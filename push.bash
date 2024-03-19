@@ -15,4 +15,3 @@ git pull origin main
 git add 答案集/"$(basename "$LATEST_TXT")"
 git commit -m "[$FILE_NAME] 答案"
 git push origin main
-
