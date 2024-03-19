@@ -9,8 +9,9 @@ console.log(filename);
 fetch(filename)
     .then(response => response.text())
     .then(text => {
-        var questionsDic1 = text;
-        console.log(typeof(questionsDic1),questionsDic1);
+        var questionsDic = JSON.parse(text.replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"'));
+	
+        console.log(typeof(questionsDic),questionsDic);
     })
     .catch(error => {
         console.error('Error fetching file:', error);
