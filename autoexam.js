@@ -1,4 +1,4 @@
-//auto_exam2.js
+//auto_exam.js
 try {
     //移除切屏监听事件
     removeEventListener("blur", getEventListeners(window).blur[0].listener);
@@ -9,9 +9,11 @@ try {
 } catch (error) {}
 
 
-var name = document.getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ", "");
+//var name = document.getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ", "");
 
-var filename = "https://raw.githubusercontent.com/GitHubChrisChen8035/zywd/main/" + name + ".txt";
+var name = "代维-集客专线-通用-L1-202403-A场";
+
+var filename = "https://raw.githubusercontent.com/GitHubChrisChen8035/zywd/main/答案集/" + name + ".txt";
 
 console.log(filename);
 
