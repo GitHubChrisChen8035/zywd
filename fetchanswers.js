@@ -25,10 +25,12 @@ try{
 
 //获取考试title，直接获取name，一方面会报错，另外它是string而非undefined类型
 try{
-	var name = document.getElementsByClassName("head-info inline-block")[0].getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ","");
+	var name0 = document.getElementsByClassName("head-info inline-block")[0].getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ","");
 	//判断name是否超长，有省略号
-	if(name.slice(name.length-3) == '...'){
-		name = name.slice(0,(name.length-3));		
+	if(name0.slice(name0.length-3) == '...'){
+		var name = name0.slice(0,(name0.length-3));		
+	}else{
+		name = name0;
 	}
 	console.log("name=" + name);
 	console.log("缓存考试info...")
@@ -256,6 +258,30 @@ catch(error){
 		})(console)
 		console.save(answers);
 		console.log("答案已导出~~~")
+		//上传到github仓库
+		const token = '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';
+		const owner = 'GitHubChrisChen8035';
+		const repo = 'zywd';
+		const path = '答案集/' + name0 + '.txt';
+		const message = '[' + name0 + '] 答案';
+		const content = btoa(unescape(encodeURIComponent(answers))); // 使用Base64编码文件内容
+
+		fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+  			method: 'PUT',
+  			headers: {
+   			 'Authorization': `token ${token}`,
+   			 'Content-Type': 'application/json'
+  			},
+  			body: JSON.stringify({
+   			 message,
+   			 content
+  			})
+		})
+		.then(response => response.json())
+		.then(data => console.log(data))
+		.catch(error => console.error(error));
+
+
 	}else{
 		console.log("考试信息info未建立！")
 	}
