@@ -9,9 +9,9 @@ try {
 } catch (error) {}
 
 
-//var name = document.getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ", "");
+var name = document.getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ", "");
 
-var name = "宁波移动员工网信安全考试";
+//var name = "宁波移动员工网信安全考试";
 
 var filename = "https://raw.githubusercontent.com/GitHubChrisChen8035/zywd/main/答案集/" + name + ".txt";
 
