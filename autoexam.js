@@ -26,7 +26,7 @@ fetch(filename)
     .then(text => {
         // 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）
         // 并保留这些字符不变，同时转义其他情况下的双引号
-        questionsDic = JSON.parse(text.replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"'));
+        questionsDic = JSON.parse(text.replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
 	
         console.log(typeof(questionsDic),questionsDic);
     })
