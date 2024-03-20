@@ -19,7 +19,8 @@ console.log(filename);
 
 //全局定义，但不赋值，默认值将是undefined
 var questionsDic;
-var questionNum;
+var questionNum = document.getElementsByClassName("list-item").length;
+console.log(questionNum);
 
 // 使用 fetch API 获取文件内容，并赋值给questionsDic
 fetch(filename)
@@ -39,21 +40,18 @@ fetch(filename)
     	req.setRequestHeader("Authorization", auth);
     	req.send(null);
     	res = JSON.parse(req.responseText);
-    	currentUserId = res.currentUser.id;
-    	var content = document.getElementsByClassName("head-info")[1].children[0].innerHTML;
-    	questionNum = parseInt(content.match(/\d+/)[0],10);
-    
-    	console.log(questionNum);
+    	currentUserId = res.currentUser.id;  
+    	
     	var next = document.evaluate('//div[@class="btn white border" and text()="下一题"]', document).iterateNext();
     	for (var i = 0; i < questionNum; i++) {
             if (next) {
-           	 	try {
-            		document.getElementsByClassName("list-item")[0].click();
+               	try {
+        	    document.getElementsByClassName("list-item")[0].click();
             	} catch (error) {}
-            		task(i, 0)
-        	    } else {
-           	 	    task(0, i)
-        	    }
+            	task(i, 0)
+            } else {
+		task(0, i)
+            }
     	}
     })
     .catch(error => {
