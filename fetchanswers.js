@@ -257,8 +257,9 @@ catch(error){
 			}
 		})(console)
 		console.save(answers);
-		console.log("答案已导出~~~")
+		console.log("答案已导出~~~");
 		//上传到github仓库
+		console.log("准备上传至Github仓库");
 		const token = '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';
 		const owner = 'GitHubChrisChen8035';
 		const repo = 'zywd';
