@@ -82,20 +82,9 @@ function task(i, j) {
             } else if (questionsDic[questionId]['type'] == 3) {
                 document.evaluate('//div[@data-dynamic-key="' + questionId + '"]/div/div[@data-region="options"]//span[text()="' + answerList + '"]/preceding-sibling::div[1]/label', document).iterateNext().click();
             } else if (questionsDic[questionId]['type'] == 2) {
-                //取消选择的checkbox
-                //document.evaluate('//a[contains(@id,"' + questionId + '")]', document).iterateNext().style.backgroundColor="#32CD32";
-                var answers = Xpath('//div[@data-dynamic-key="' + questionId + '"]/div/div[@data-region="options"]/div//input[@type="checkbox"]');
-                if (answers[0]) {
-                    for (ans of answers) {
-                        ans.checked = false;
-                    }
-                }
-                //必须先反选，再延迟选择正确答案。猜测是正确答案click后，会更新checkbox，导致之前的反选操作失效
-                setTimeout(function () {
                     for (var answer of answerList) {
                         document.evaluate('//div[@data-dynamic-key="' + questionId + '"]/div/div[@data-region="options"]//div[text()="' + answer + '"]/../../div/label',document).iterateNext().click();
                     }
-                }, 500)
             } else {
                 console.log("题型错误！");
                 Xpath('//a[contains(@id,"waiting-check-' + questionId + '")]')[0].click();
