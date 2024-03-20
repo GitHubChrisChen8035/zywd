@@ -265,11 +265,9 @@ catch(error){
 		const token = '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';
 		const owner = 'GitHubChrisChen8035';
 		const repo = 'zywd';
-        var name0 = document.getElementsByClassName("head-info inline-block")[0].getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ","");
-        console.log(name0);
 		const path = '答案集/' + name0 + '.txt';
 		const message = '[' + name0 + '] 答案';
-        console.log(path,message)
+        	console.log(path,message)
 		const content = btoa(unescape(encodeURIComponent(answers))); // 使用Base64编码文件内容
 
 		fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
