@@ -29,10 +29,36 @@ fetch(filename)
         questionsDic = JSON.parse(text.replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
 	
         console.log(typeof(questionsDic),questionsDic);
+	
+    	console.log(name + "  开始答题...");
+    	var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
+    	console.log(auth);
+    	var req = new XMLHttpRequest();
+    	req.open("GET", "/api/v1/system/setting/frontend?_=" + new Date().getTime(), false);
+    	req.setRequestHeader("Authorization", auth);
+    	req.send(null);
+    	res = JSON.parse(req.responseText);
+    	currentUserId = res.currentUser.id;
+    	var content = document.getElementsByClassName("head-info")[1].children[0].innerHTML;
+    	var questionNum = parseInt(content.match(/\d+/)[0],10);
+    
+    	console.log(questionNum);
+    	var next = document.evaluate('//div[@class="btn white border" and text()="下一题"]', document).iterateNext();
+    	for (var i = 0; i < questionNum; i++) {
+            if (next) {
+           	 	try {
+            		document.getElementsByClassName("list-item")[0].click();
+            	} catch (error) {}
+            		task(i, 0)
+        	    } else {
+           	 	    task(0, i)
+        	    }
+    	}
     })
     .catch(error => {
-	questionsDic = {};
-        console.log('当前考试暂无答案');
+	
+         console.log("当前考试暂无答案")
+    	 alert("当前考试暂无答案")
     });
 
 //JS原生xpath选择，document.evaluate返回的是枚举类型，需要逐个取出
@@ -92,35 +118,3 @@ function task(i, j) {
         }
     }, 1000 * i);
 }
-if (Object.keys(questionsDic).length > 0) {
-    console.log(name + "  开始答题...");
-    var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
-    console.log(auth);
-    var req = new XMLHttpRequest();
-    req.open(
-        "GET", "/api/v1/system/setting/frontend?_=" + new Date().getTime(), false);
-    req.setRequestHeader("Authorization", auth);
-    req.send(null);
-    res = JSON.parse(req.responseText);
-    currentUserId = res.currentUser.id;
-    var content = document.getElementsByClassName("head-info")[1].children[0].innerHTML;
-    var questionNum = parseInt(content.match(/\d+/)[0],10);
-    
-    console.log(questionNum);
-    var next = document.evaluate('//div[@class="btn white border" and text()="下一题"]', document).iterateNext();
-    for (var i = 0; i < questionNum; i++) {
-        if (next) {
-            try {
-                document.getElementsByClassName("list-item")[0].click();
-            } catch (error) {}
-            task(i, 0)
-        } else {
-            task(0, i)
-        }
-    }
-
-} else {
-    console.log("当前考试暂无答案")
-    alert("当前考试暂无答案")
-}
-
