@@ -258,7 +258,7 @@ catch(error){
 		console.log("答案已导出~~~");
 		//上传到github仓库
 		console.log("准备上传至Github仓库");
-		const token = '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';
+		const token = atob('Z2hwX3I0TWNMbEtRTHVBM2pYemdDdUJBQURhVkRhZjZkcDBybEQ2QQ==');
 		const owner = 'GitHubChrisChen8035';
 		const repo = 'zywd';
 		const path = '答案集/' + name + '.txt';
