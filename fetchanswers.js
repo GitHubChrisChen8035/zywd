@@ -27,7 +27,7 @@ try{
 try{
 	var name = document.getElementsByClassName("head-info inline-block")[0].getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ","");
 	//判断name是否超长，有省略号
-	if(name.slice(name0.length-3) == '...'){
+	if(name.slice(name.length-3) == '...'){
 		name = name.slice(0,(name.length-3));		
 	}
 	console.log("name=" + name);
