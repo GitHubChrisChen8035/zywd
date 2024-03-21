@@ -263,7 +263,7 @@ catch(error){
 		const repo = 'zywd';
 		const path = '答案集/' + name + '.txt';
 		const message = '[' + name + '] 答案';
-        	console.log(path,message)
+        	console.log(token,path,message)
 		const content = btoa(unescape(encodeURIComponent(answers))); // 使用Base64编码文件内容
 
 		fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
