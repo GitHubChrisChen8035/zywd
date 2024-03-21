@@ -25,12 +25,10 @@ try{
 
 //获取考试title，直接获取name，一方面会报错，另外它是string而非undefined类型
 try{
-	var name0 = document.getElementsByClassName("head-info inline-block")[0].getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ","");
+	var name = document.getElementsByClassName("head-info inline-block")[0].getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ","");
 	//判断name是否超长，有省略号
-	if(name0.slice(name0.length-3) == '...'){
-		var name = name0.slice(0,(name0.length-3));		
-	}else{
-		name = name0;
+	if(name.slice(name0.length-3) == '...'){
+		name = name.slice(0,(name.length-3));		
 	}
 	console.log("name=" + name);
 	console.log("缓存考试info...")
@@ -64,29 +62,28 @@ try{
 	var questionNum = value.paper.questionNum;
 	console.log(questionNum);
 	var questionsCopy = value.paper.questions;
-    var questionsCopy_filter = questionsCopy.map(function(item) {
-    var questionAttrCopysValues = [];
+    	var questionsCopy_filter = questionsCopy.map(function(item) {
+    	var questionAttrCopysValues = [];
 
-    if (item.questionAttrCopys) {
-        item.questionAttrCopys.forEach(function(attr) {
-        questionAttrCopysValues.push(attr.value);
-    });
-    }
+    	if (item.questionAttrCopys) {
+            item.questionAttrCopys.forEach(function(attr) {
+                questionAttrCopysValues.push(attr.value);
+    	    });
+        }
     //console.log(questionAttrCopysValues);
-    return {
-        content: item.content,
-        questionAttrCopys: questionAttrCopysValues,
-        type: item.type
-      };
-    });
+	return {
+	    content: item.content,
+	    questionAttrCopys: questionAttrCopysValues,
+	    type: item.type
+	    };
+	});
 
-    console.log(questionsCopy_filter);
+        console.log(questionsCopy_filter);
 	//console.log(questionsCopy);
 	//写入浏览器缓存
 	var info = {};
 
-    info["name0"] = name0;
-	info["name"] = name;
+    	info["name"] = name;
 	info["auth"] = auth;
 	info["currentUserId"] = currentUserId;
 	info["examId"] = examId;
@@ -115,7 +112,6 @@ catch(error){
 	//if (typeof(info) != "undefined"){
 	if (info){
 		console.log("开始爬取答案...")
-        var name0 = info["name0"];
 		var name = info["name"];
 		var auth = info["auth"]
 		var currentUserId = info["currentUserId"];
@@ -262,11 +258,11 @@ catch(error){
 		console.log("答案已导出~~~");
 		//上传到github仓库
 		console.log("准备上传至Github仓库");
-		const token = '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';
+		const token = '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';
 		const owner = 'GitHubChrisChen8035';
 		const repo = 'zywd';
-		const path = '答案集/' + name0 + '.txt';
-		const message = '[' + name0 + '] 答案';
+		const path = '答案集/' + name + '.txt';
+		const message = '[' + name + '] 答案';
         	console.log(path,message)
 		const content = btoa(unescape(encodeURIComponent(answers))); // 使用Base64编码文件内容
 
