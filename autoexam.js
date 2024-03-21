@@ -1,8 +1,8 @@
 //auto_exam.js
 try {
     //移除切屏监听事件
-    removeEventListener("blur", getEventListeners(window).blur[0].listener);
-    //window.blur = "";
+    //removeEventListener("blur", getEventListeners(window).blur[0].listener);
+    window.blur = "";
     setInterval(function () {
         $("[onpaste]").attr("oncontextmenu", "").attr("oncopy", "").attr("oncopy", "").attr("onpaste", "");
     }, 2000)
@@ -10,6 +10,9 @@ try {
 
 
 var name = document.getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ", "");
+if(name.slice(name.length-3) == '...'){
+	name = name.slice(0,(name.length-3));		
+}
 
 //var name = "宁波移动员工网信安全考试";
 
@@ -17,10 +20,11 @@ var filename = "https://raw.githubusercontent.com/GitHubChrisChen8035/zywd/main/
 
 console.log(filename);
 
-//全局定义，但不赋值，默认值将是undefined
-var questionsDic;
 var questionNum = document.getElementsByClassName("list-item").length;
 console.log(questionNum);
+
+//全局定义，但不赋值，默认值将是undefined
+var questionsDic;
 
 // 使用 fetch API 获取文件内容，并赋值给questionsDic
 fetch(filename)
@@ -97,9 +101,6 @@ function task(i, j) {
         if (i == questionNum - 1 || j == questionNum - 1) {
             //由于多选需要反选操作，导致正确答案填入有延后，当多选题量大时，需要延迟一定时间弹出alert
             setTimeout(function () {
-                //alert("答题完成，请记住个人码，重新进入考试");
-                //window.opener=null;window.top.open('','_self','');window.close();
-                //document.getElementsByClassName("text-right")[0].getElementsByClassName("btn")[0].innerText = "我要交卷!";
                 alert("答题完成，感谢使用");
                 console.log("答题完毕，感谢使用");
             }, questionNum * 50)

@@ -1,24 +1,8 @@
-//auto_exam1.js
+//fetchanswers.js
 try{
-	//移除开发者工具监测弹窗
-	var alt = document.getElementsByClassName("alertify alertify-show alertify-alert")[0];
-	if (typeof(alt) != "undefined"){alt.remove()};
-	//移除切屏次数弹窗
-	var alt1 = document.getElementsByClassName("dialog animated")[0];
-	if (typeof(alt1) != "undefined"){alt1.remove()};
-	//影响交卷功能！
-	var alt2 = document.getElementsByClassName("modal auto")[0];
-	if (typeof(alt2) != "undefined"){alt2.remove()};
-	//移除cover层，解除操作限制
-	var alt3 = document.getElementsByClassName("dialog-overlay")[0];
-	if (typeof(alt3) != "undefined"){alt3.remove()};
-	var alt4 = document.getElementsByClassName("alertify-cover")[0];
-	if (typeof(alt4) != "undefined"){alt4.remove()};
 	//移除切屏监听事件
-	removeEventListener("blur",getEventListeners(window).blur[0].listener);
-	//window.blur = "";
-	//移除刷新页面后弹窗confirm
-	window.onbeforeunload = "";
+	//removeEventListener("blur",getEventListeners(window).blur[0].listener);
+	window.blur = "";
 	//解除复制粘贴限制，这里[onpaste]是用属性选择的办法定位元素，并修改其attr
 	setInterval(function(){ $("[onpaste]").attr("oncontextmenu", "").attr("oncopy", "").attr("oncut", "").attr("onpaste", ""); } , 2000)
 }catch(error){}
@@ -62,28 +46,28 @@ try{
 	var questionNum = value.paper.questionNum;
 	console.log(questionNum);
 	var questionsCopy = value.paper.questions;
-    var questionsCopy_filter = questionsCopy.map(function(item) {
-    var questionAttrCopysValues = [];
+    	var questionsCopy_filter = questionsCopy.map(function(item) {
+    	var questionAttrCopysValues = [];
 
-    if (item.questionAttrCopys) {
-        item.questionAttrCopys.forEach(function(attr) {
-        questionAttrCopysValues.push(attr.value);
-    });
-    }
-    //console.log(questionAttrCopysValues);
-    return {
-        content: item.content,
-        questionAttrCopys: questionAttrCopysValues,
-        type: item.type
-      };
-    });
+    	if (item.questionAttrCopys) {
+            item.questionAttrCopys.forEach(function(attr) {
+                questionAttrCopysValues.push(attr.value);
+    	    });
+        }
+    	//console.log(questionAttrCopysValues);
+	return {
+	    content: item.content,
+	    questionAttrCopys: questionAttrCopysValues,
+	    type: item.type
+	    };
+	});
 
-    console.log(questionsCopy_filter);
+        console.log(questionsCopy_filter);
 	//console.log(questionsCopy);
 	//写入浏览器缓存
 	var info = {};
 
-	info["name"] = name;
+    	info["name"] = name;
 	info["auth"] = auth;
 	info["currentUserId"] = currentUserId;
 	info["examId"] = examId;
@@ -94,22 +78,12 @@ try{
 
 	localStorage.setItem("info",JSON.stringify(info));
 	console.log("考试信息缓存完毕！")
-	
-	function reload(){
-		//alert("请记住您的个人码：" + "111");
-		location.reload();
-		console.log("reload..");
-	};
-	//点击"我要交卷",刷新当前页面
-	document.getElementsByClassName("text-right")[0].getElementsByClassName("btn")[0].addEventListener("click",reload);	
 
 }
 //大部分catch error的情况，是未发现name，即不在考试页	
 catch(error){
-	
 	var info = JSON.parse(localStorage.getItem("info"));
 	//如果浏览器缓存没有info，那么info==null，typeof=="object"，所以不能用"undefined"来判断，直接用if(info)即可
-	//if (typeof(info) != "undefined"){
 	if (info){
 		console.log("开始爬取答案...")
 		var name = info["name"];
@@ -229,7 +203,7 @@ catch(error){
 		}
 
 		answers = JSON.stringify(questionsDic1);
-
+		//将答案保存至本地
 		(function (console) {
 			console.save = function (data, filename) {
 				let MIME_TYPE = "text/json";
@@ -255,7 +229,34 @@ catch(error){
 			}
 		})(console)
 		console.save(answers);
-		console.log("答案已导出~~~")
+		console.log("答案已导出~~~");
+		
+		//上传到github仓库
+		console.log("准备上传至Github仓库");
+		const token = 'github_pat_' + '11AGBO4FA0Yy6PH8Rsg161_uV7im6fz8LIHl0FQHfJd1KdPUCqzqobGgofbN7APzJxM4WZEWQ6rAfrH1bW';
+		const owner = 'GitHubChrisChen8035';
+		const repo = 'zywd';
+		const path = '答案集/' + name + '.txt';
+		const message = '[' + name + '] 答案';
+        	//console.log(token,path,message)
+		const content = btoa(unescape(encodeURIComponent(answers))); // 使用Base64编码文件内容
+
+		fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+  			method: 'PUT',
+  			headers: {
+   			 'Authorization': `token ${token}`,
+   			 'Content-Type': 'application/json'
+  			},
+  			body: JSON.stringify({
+   			 message,
+   			 content
+  			})
+		})
+		.then(response => response.json())
+		.then(data => console.log(data))
+		.catch(error => console.error(error));
+		alert("已成功上传至Github仓库");
+
 	}else{
 		console.log("考试信息info未建立！")
 	}
