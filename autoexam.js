@@ -10,6 +10,9 @@ try {
 
 
 var name = document.getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ", "");
+if(name.slice(name.length-3) == '...'){
+	name = name.slice(0,(name.length-3));		
+}
 
 //var name = "宁波移动员工网信安全考试";
 
