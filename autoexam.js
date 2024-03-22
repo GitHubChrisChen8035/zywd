@@ -46,7 +46,7 @@ fetch(filename)
     	res = JSON.parse(req.responseText);
     	currentUserId = res.currentUser.id;  
     	
-    	var next = document.evaluate('//div[@class="btn white border" and text()="下一题"]', document).iterateNext();
+    	var next = document.evaluate('//div[contains(@class, "border") and (text()="下一题" or text()="上一题")]', document).iterateNext();
     	for (var i = 0; i < questionNum; i++) {
             if (next) {
                	try {
