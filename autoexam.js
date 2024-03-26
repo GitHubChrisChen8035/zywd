@@ -18,8 +18,8 @@ var questionNum = document.getElementsByClassName("list-item").length;
 console.log(questionNum);
 
 function autoExam(name) {
-  const url = 'https://api.github.com/repos/GitHubChrisChen8035/zywd/contents/答案集' + name + '.txt';
-
+  const url = 'https://api.github.com/repos/GitHubChrisChen8035/zywd/contents/答案集/' + name + '.txt';
+  console.log(url);
   // 发送GET请求
   fetch(url)
     .then(response => {
