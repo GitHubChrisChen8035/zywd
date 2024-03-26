@@ -7,7 +7,7 @@ try {
     }, 2000)
 } catch (error) {}
 
-
+var text; 
 var name = document.getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ", "");
 if(name.slice(name.length-3) == '...'){
 	name = name.slice(0,(name.length-3));		
@@ -30,14 +30,13 @@ function getFileContent(path) {
     })
     .then(data => {
       // 对Base64编码的内容进行解码
-      const content = decodeURIComponent(escape(atob(data.content)));
-      console.log(content);
-      return content;
+      text = decodeURIComponent(escape(atob(data.content)));
+      console.log(text);      
     });
 }
 
 // 调用函数获取txt答案文档内容
-var text = getFileContent(path);
+getFileContent(path);
 
 var questionNum = document.getElementsByClassName("list-item").length;
 console.log(questionNum);
@@ -59,7 +58,7 @@ req.open("GET", "/api/v1/system/setting/frontend?_=" + new Date().getTime(), fal
 req.setRequestHeader("Authorization", auth);
 req.send(null);
 res = JSON.parse(req.responseText);
-currentUserId = res.currentUser.id;
+currentUserId = res.currentUser.id;  
 
 var next = document.evaluate('//div[contains(@class, "border") and (text()="下一题" or text()="上一题")]', document).iterateNext();
 for (var i = 0; i < questionNum; i++) {
@@ -72,7 +71,7 @@ for (var i = 0; i < questionNum; i++) {
 	task(0, i)
     }
 }
-
+}
 //JS原生xpath选择，document.evaluate返回的是枚举类型，需要逐个取出
 function Xpath(xpath) {
     var xresult = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
