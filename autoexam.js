@@ -1,8 +1,7 @@
 //auto_exam.js
 try {
     //移除切屏监听事件
-    //removeEventListener("blur", getEventListeners(window).blur[0].listener);
-    window.blur = "";
+    removeEventListener("blur", getEventListeners(window).blur[0].listener);
     setInterval(function () {
         $("[onpaste]").attr("oncontextmenu", "").attr("oncopy", "").attr("oncopy", "").attr("onpaste", "");
     }, 2000)
