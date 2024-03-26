@@ -24,6 +24,7 @@ function getFileContent(path) {
     .then(response => {
       // 检查响应状态
       if (!response.ok) {
+	alert(`本场考试暂无答案`);
 	throw new Error(`本场考试暂无答案`);
       }
       return response.json();
@@ -75,8 +76,7 @@ getFileContent(path)
 
 		
 	}).catch(err => {
-        console.error("发生错误:", err.message);
-        alert(err.message);
+        console.error("Err:", err.message);
     });
 
 
