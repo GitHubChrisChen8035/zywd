@@ -24,19 +24,17 @@ function getFileContent(path) {
     .then(response => {
       // 检查响应状态
       if (!response.ok) {
-        alert(`本场考试暂无答案`);
+	throw new Error(`本场考试暂无答案`);
       }
       return response.json();
     })
     .then(data => {
       // 对Base64编码的内容进行解码
       text = decodeURIComponent(escape(atob(data.content)));
-      console.log(text);      
+      console.log(text);
+      return text;      
     });
 }
-
-// 调用函数获取txt答案文档内容
-getFileContent(path);
 
 var questionNum = document.getElementsByClassName("list-item").length;
 console.log(questionNum);
@@ -44,33 +42,43 @@ console.log(questionNum);
 //全局定义，但不赋值，默认值将是undefined
 var questionsDic;
 
-// 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）
-// 并保留这些字符不变，同时转义其他情况下的双引号
-questionsDic = JSON.parse(text.replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
+//读取答案文档并赋值给text，再处理后面的答题
+getFileContent(path)
+	.then(text=>{
+		// 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）
+		// 并保留这些字符不变，同时转义其他情况下的双引号
+		questionsDic = JSON.parse(text.replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
+		
+		console.log(typeof(questionsDic),questionsDic);
+		
+		console.log(name + "  开始答题...");
+		var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
+		console.log(auth);
+		var req = new XMLHttpRequest();
+		req.open("GET", "/api/v1/system/setting/frontend?_=" + new Date().getTime(), false);
+		req.setRequestHeader("Authorization", auth);
+		req.send(null);
+		res = JSON.parse(req.responseText);
+		currentUserId = res.currentUser.id;  
+		
+		var next = document.evaluate('//div[contains(@class, "border") and (text()="下一题" or text()="上一题")]', document).iterateNext();
+		for (var i = 0; i < questionNum; i++) {
+		    if (next) {
+			try {
+			    document.getElementsByClassName("list-item")[0].click();
+			} catch (error) {}
+			task(i, 0)
+		    } else {
+			task(0, i)
+		    }
+		}
 
-console.log(typeof(questionsDic),questionsDic);
+		
+	}).catch(err => {
+        console.error("发生错误:", err.message);
+        alert(err.message);
+    });
 
-console.log(name + "  开始答题...");
-var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
-console.log(auth);
-var req = new XMLHttpRequest();
-req.open("GET", "/api/v1/system/setting/frontend?_=" + new Date().getTime(), false);
-req.setRequestHeader("Authorization", auth);
-req.send(null);
-res = JSON.parse(req.responseText);
-currentUserId = res.currentUser.id;  
-
-var next = document.evaluate('//div[contains(@class, "border") and (text()="下一题" or text()="上一题")]', document).iterateNext();
-for (var i = 0; i < questionNum; i++) {
-    if (next) {
-	try {
-	    document.getElementsByClassName("list-item")[0].click();
-	} catch (error) {}
-	task(i, 0)
-    } else {
-	task(0, i)
-    }
-}
 
 //JS原生xpath选择，document.evaluate返回的是枚举类型，需要逐个取出
 function Xpath(xpath) {
