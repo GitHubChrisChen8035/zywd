@@ -24,7 +24,7 @@ function getFileContent(path) {
     .then(response => {
       // 检查响应状态
       if (!response.ok) {
-        throw new Error(`本场考试暂无答案`);
+        alert(`本场考试暂无答案`);
       }
       return response.json();
     })
