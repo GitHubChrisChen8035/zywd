@@ -1,11 +1,10 @@
 //auto_exam.js
-try {
-    //移除切屏监听事件
-    removeEventListener("blur", getEventListeners(window).blur[0].listener);
-    setInterval(function () {
-        $("[onpaste]").attr("oncontextmenu", "").attr("oncopy", "").attr("onpaste", "");
-    }, 2000)
-} catch (error) {}
+try{
+	//移除切屏监听事件
+	removeEventListener("blur",getEventListeners(window).blur[0].listener);
+	//解除复制粘贴限制，这里[onpaste]是用属性选择的办法定位元素，并修改其attr
+	setInterval(function(){ $("[onpaste]").attr("oncontextmenu", "").attr("oncopy", "").attr("oncut", "").attr("onpaste", ""); } , 2000)
+}catch(error){}
 
 var name = document.getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ", "");
 if(name.slice(name.length-3) == '...'){
