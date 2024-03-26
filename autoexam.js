@@ -3,82 +3,72 @@ try {
     //移除切屏监听事件
     removeEventListener("blur", getEventListeners(window).blur[0].listener);
     setInterval(function () {
-        $("[onpaste]").attr("oncontextmenu", "").attr("oncopy", "").attr("oncopy", "").attr("onpaste", "");
+        $("[onpaste]").attr("oncontextmenu", "").attr("oncopy", "").attr("onpaste", "");
     }, 2000)
 } catch (error) {}
 
-var text; 
 var name = document.getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ", "");
 if(name.slice(name.length-3) == '...'){
 	name = name.slice(0,(name.length-3));		
 }
 
 //var name = "宁波移动员工网信安全考试";
-var path = "答案集/" + name + ".txt";
 
-function getFileContent(path) {
-  const url = `https://api.github.com/repos/GitHubChrisChen8035/zywd/contents/${path}`;
+var questionNum = document.getElementsByClassName("list-item").length;
+console.log(questionNum);
+
+function autoExam(name) {
+  const url = 'https://api.github.com/repos/GitHubChrisChen8035/zywd/contents/答案集' + name + '.txt';
 
   // 发送GET请求
-  retrun fetch(url)
+  fetch(url)
     .then(response => {
       // 检查响应状态
       if (!response.ok) {
-	alert(`本场考试暂无答案`);
-	throw new Error(`本场考试暂无答案`);
+        alert(`本场考试暂无答案`);
+        throw new Error(`本场考试暂无答案`);
       }
       return response.json();
     })
     .then(data => {
       // 对Base64编码的内容进行解码
-      text = decodeURIComponent(escape(atob(data.content)));
-      console.log(text);
-      return text;      
-    });
-}
-
-var questionNum = document.getElementsByClassName("list-item").length;
-console.log(questionNum);
-
-//全局定义，但不赋值，默认值将是undefined
-var questionsDic;
-
-//读取答案文档并赋值给text，再处理后面的答题
-getFileContent(path)
-	.then(text=>{
-		// 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）
-		// 并保留这些字符不变，同时转义其他情况下的双引号
-		questionsDic = JSON.parse(text.replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
-		
-		console.log(typeof(questionsDic),questionsDic);
-		
-		console.log(name + "  开始答题...");
-		var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
-		console.log(auth);
-		var req = new XMLHttpRequest();
-		req.open("GET", "/api/v1/system/setting/frontend?_=" + new Date().getTime(), false);
-		req.setRequestHeader("Authorization", auth);
-		req.send(null);
-		res = JSON.parse(req.responseText);
-		currentUserId = res.currentUser.id;  
-		
-		var next = document.evaluate('//div[contains(@class, "border") and (text()="下一题" or text()="上一题")]', document).iterateNext();
-		for (var i = 0; i < questionNum; i++) {
-		    if (next) {
-			try {
-			    document.getElementsByClassName("list-item")[0].click();
-			} catch (error) {}
-			task(i, 0)
-		    } else {
-			task(0, i)
-		    }
-		}
-
-		
+      const text = decodeURIComponent(escape(atob(data.content)));
+      //console.log(text);
+      return text;
+    })
+    .then(text => {
+	// 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）,并保留这些字符不变，同时转义其他情况下的双引号
+	const questionsDic = JSON.parse(text.replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
+	
+	console.log(typeof(questionsDic),questionsDic);
+	
+	console.log(name + "  开始答题...");
+	var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
+	//console.log(auth);
+	var req = new XMLHttpRequest();
+	req.open("GET", "/api/v1/system/setting/frontend?_=" + new Date().getTime(), false);
+	req.setRequestHeader("Authorization", auth);
+	req.send(null);
+	res = JSON.parse(req.responseText);
+	currentUserId = res.currentUser.id;  
+	
+	var next = document.evaluate('//div[contains(@class, "border") and (text()="下一题" or text()="上一题")]', document).iterateNext();
+	for (var i = 0; i < questionNum; i++) {
+	    if (next) {
+		try {
+		    document.getElementsByClassName("list-item")[0].click();
+		} catch (error) {}
+		task(i, 0)
+	    } else {
+		task(0, i)
+	    }
+	}
+	
+			
 	}).catch(err => {
-        console.error("Err:", err.message);
-    });
-
+	        console.error("发生错误:", err.message);
+	    });
+}
 
 //JS原生xpath选择，document.evaluate返回的是枚举类型，需要逐个取出
 function Xpath(xpath) {
@@ -123,3 +113,5 @@ function task(i, j) {
         }
     }, 1000 * i);
 }
+
+autoExam(name);
