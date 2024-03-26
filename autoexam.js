@@ -71,7 +71,6 @@ for (var i = 0; i < questionNum; i++) {
 	task(0, i)
     }
 }
-}
 
 //JS原生xpath选择，document.evaluate返回的是枚举类型，需要逐个取出
 function Xpath(xpath) {
