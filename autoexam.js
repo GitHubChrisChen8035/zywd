@@ -20,7 +20,7 @@ function getFileContent(path) {
   const url = `https://api.github.com/repos/GitHubChrisChen8035/zywd/contents/${path}`;
 
   // 发送GET请求
-  fetch(url)
+  retrun fetch(url)
     .then(response => {
       // 检查响应状态
       if (!response.ok) {
