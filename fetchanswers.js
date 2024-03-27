@@ -233,9 +233,8 @@ catch(error){
 		console.save(answers);
 		console.log("答案已导出~~~");
 		
-		//上传到github仓库
 		console.log("准备上传至Github仓库");
-       
+		//var name = '在线考试';
 		const token = 'github_pat_' + '11AGBO4FA0Yy6PH8Rsg161_uV7im6fz8LIHl0FQHfJd1KdPUCqzqobGgofbN7APzJxM4WZEWQ6rAfrH1bW';
 		const owner = 'GitHubChrisChen8035';
 		const repo = 'zywd';
@@ -243,44 +242,110 @@ catch(error){
 		const message = '上传by ' + fullName;
 		const newContent = JSON.parse(answers); // 假设answers是JSON格式的字符串
 		
-		// 尝试获取已存在的文件
-		fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-		    method: 'GET',
-		    headers: {
-		   	'Authorization': `token ${token}`,
-		   	'Content-Type': 'application/json'
-		  }
-		})
-		.then(response => {
-		    if (response.status === 404) {
-		        // 文件不存在，直接上传新内容
-		        console.log("答案不存在，开始上传...");
-		        return fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-		            method: 'PUT',
+	        //js文件中的ansArray更新
+	        async function updateJavaScriptFile() {
+		    try {
+		        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+		            method: 'GET',
 		            headers: {
 		                'Authorization': `token ${token}`,
 		                'Content-Type': 'application/json'
-		            },
-		            body: JSON.stringify({
-		                message,
-		                content: btoa(unescape(encodeURIComponent(JSON.stringify(newContent))))
-		            })
-		        }).then(uploadResponse => {
-		            if (uploadResponse.ok) {
-		                console.log("答案上传成功");
-				alert("答案已上传，可使用自动答题");
-		            } else {
-		                throw new Error('答案上传失败');
-				alert("答案更新失败！");
 		            }
 		        });
-		    } else if (response.ok) {
-		        // 文件存在，读取内容并合并
-		        console.log("文件存在，开始合并...");
-		        return response.json().then(data => {
+		        const data = await response.json();
+		        const uploadedContent = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+		
+		        const jsResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/autoexam.js`, {
+		            method: 'GET',
+		            headers: {
+		                'Authorization': `token ${token}`,
+		                'Content-Type': 'application/json'
+		            }
+		        });
+		        const jsData = await jsResponse.json();
+		        let jsFileContent = decodeURIComponent(escape(atob(jsData.content)));
+		        let ansArrayMatch = jsFileContent.match(/var ansArray = (\{.*?\});/);
+		
+		        if (ansArrayMatch) {
+		            let ansArray = JSON.parse(ansArrayMatch[1]);
+		            if (typeof ansArray === 'object' && !Array.isArray(ansArray)) {
+		                while (Object.keys(ansArray).length >= 10) {
+		                    delete ansArray[Object.keys(ansArray)[0]];
+		                }
+		                ansArray[name] = uploadedContent;
+		                jsFileContent = jsFileContent.replace(ansArrayMatch[0], `var ansArray = ${JSON.stringify(ansArray)};`);
+		            }
+	
+		            const updateResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/autoexam.js`, {
+		                method: 'PUT',
+		                headers: {
+		                    'Authorization': `token ${token}`,
+		                    'Content-Type': 'application/json'
+		                },
+		                body: JSON.stringify({
+		                    message: '更新 [' + name + '] 答案',
+		                    content: btoa(unescape(encodeURIComponent(jsFileContent))),
+		                    sha: jsData.sha
+		                })
+		            });
+		
+		            if (updateResponse.ok) {
+		                console.log("JS文件更新成功");
+		                alert("答案已更新，自动答题功能生效");
+		            } else {
+		                throw new Error('JS文件更新失败');
+		            }
+		        } else {
+		            throw new Error('未找到 ansArray');
+		        }
+		    } catch (error) {
+		        console.error(error);
+		        alert("操作失败");
+		    }
+		}
+	
+	
+	
+		//上传、合并答案集
+		async function uploadOrUpdateFile() {
+		    try {
+		        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+		            method: 'GET',
+		            headers: {
+		                'Authorization': `token ${token}`,
+		                'Content-Type': 'application/json'
+		            }
+		        });
+		
+		        if (response.status === 404) {
+		            // 文件不存在，直接上传新内容
+		            console.log("答案不存在，开始上传...");
+		            const uploadResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+		                method: 'PUT',
+		                headers: {
+		                    'Authorization': `token ${token}`,
+		                    'Content-Type': 'application/json'
+		                },
+		                body: JSON.stringify({
+		                    message,
+		                    content: btoa(unescape(encodeURIComponent(JSON.stringify(newContent))))
+		                })
+		            });
+		
+		            if (uploadResponse.ok) {
+		                console.log("答案上传成功");
+		                //上传至答案集后，将内容写入autoexam.js
+		                updateJavaScriptFile();
+		            } else {
+		                throw new Error('上传答案失败');
+		            }
+		        } else if (response.ok) {
+		            // 文件存在，读取内容并合并
+		            console.log("文件存在，开始合并...");
+		            const data = await response.json();
 		            const existingContent = JSON.parse(decodeURIComponent(escape(atob(data.content))));
 		            const mergedContent = Object.assign(existingContent, newContent);
-		            return fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+		            const updateResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
 		                method: 'PUT',
 		                headers: {
 		                    'Authorization': `token ${token}`,
@@ -291,25 +356,28 @@ catch(error){
 		                    content: btoa(unescape(encodeURIComponent(JSON.stringify(mergedContent)))),
 		                    sha: data.sha // 需要原文件的SHA来更新文件
 		                })
-		            }).then(updateResponse => {
-		                if (updateResponse.ok) {
-		                    console.log("文件更新成功");
-			      	    alert("答案已更新");
-		                } else {
-		                    throw new Error('文件更新失败');
-				    alert("答案更新失败！");
-		                }
 		            });
-		        });
-		    } else {
-		        throw new Error('获取文件失败');
-			alert("文件获取失败！");
+		
+		            if (updateResponse.ok) {
+		                console.log("文件更新成功");
+		                updateJavaScriptFile();
+		            } else {
+		                throw new Error('文件更新失败');
+		            }
+		        } else {
+		            throw new Error('获取答案失败');
+		        }
+		    } catch (error) {
+		        console.error(error);
+		        alert(error);
 		    }
-		})
-		.catch(error => {
-		    console.error(error);
-		    alert("操作失败");
-		});
+		}
+	
+	
+	uploadOrUpdateFile();
+	
+
+		
 	}else{
 		console.log("考试信息info未建立！")
 	}
