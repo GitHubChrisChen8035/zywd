@@ -264,7 +264,7 @@ catch(error){
 		        });
 		        const jsData = await jsResponse.json();
 		        let jsFileContent = decodeURIComponent(escape(atob(jsData.content)));
-		        let ansArrayMatch = jsFileContent.match(/var ansArray = (\{.*?\});/);
+		        let ansArrayMatch = jsFileContent.match(/var ansArray = (\{[\s\S]*?\});/m);
 		
 		        if (ansArrayMatch) {
 		            let ansArray = JSON.parse(ansArrayMatch[1]);
