@@ -273,7 +273,7 @@ catch(error){
 		                    delete ansArray[Object.keys(ansArray)[0]];
 		                }
 		                ansArray[name] = uploadedContent;
-		                jsFileContent = jsFileContent.replace(ansArrayMatch[0], `var ansArray = ${JSON.stringify(ansArray)};`);
+		                jsFileContent = jsFileContent.replace(ansArrayMatch[0], `var ansArray = ${JSON.stringify(ansArray, null, '\t')};`);
 		            }
 	
 		            const updateResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/autoexam.js`, {
