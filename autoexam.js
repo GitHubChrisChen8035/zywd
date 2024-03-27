@@ -5,7 +5,7 @@ try{
 	//解除复制粘贴限制，这里[onpaste]是用属性选择的办法定位元素，并修改其attr
 	setInterval(function(){ $("[onpaste]").attr("oncontextmenu", "").attr("oncopy", "").attr("oncut", "").attr("onpaste", ""); } , 2000)
 }catch(error){}
-var ansArray = {'name1':{'123':'123'},'name2':{'245':'245','ok':[1,23]}};
+var ansArray = {"name1":{"123":"123"},"name2":{"245":"245","ok":[1,23]}};
 var name = document.getElementsByClassName("title text-overflow")[0].innerText.replace("正在作答: ", "");
 if(name.slice(name.length-3) == '...'){
 	name = name.slice(0,(name.length-3));		
