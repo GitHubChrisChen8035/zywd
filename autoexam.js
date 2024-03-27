@@ -28,9 +28,9 @@ try {
     if (name in ansArray){
 	  
 	// 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）,并保留这些字符不变，同时转义其他情况下的双引号
-	const questionsDic = JSON.parse(ansArray[name].replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
+	const questionsDic = JSON.parse(JSON.stringify(ansArray[name]).replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
 	
-	console.log(ansArray[name],typeof(questionsDic),questionsDic);
+	console.log(typeof(questionsDic),questionsDic);
 	
 	console.log(name + "  开始答题...");
 	var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
@@ -97,6 +97,7 @@ function task(i, j) {
             }
         } catch (error) {
             Xpath('//a[contains(@id,"waiting-check-' + questionId + '")]')[0].click();
+	    console.log(error);
         }
         try {
             document.evaluate('//div[@class="btn white border" and text()="下一题"]', document).iterateNext().click();
