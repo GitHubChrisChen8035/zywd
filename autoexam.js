@@ -17,8 +17,14 @@ var name = document.getElementsByClassName("title text-overflow")[0].innerText.r
 if(name.slice(name.length-3) == '...'){
 	name = name.slice(0,(name.length-3));		
 }
-console.log(name,name in ansArray);
+
 //var name = "宁波移动员工网信安全考试";
+console.log(name,name in ansArray);
+
+// 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）,并保留这些字符不变，同时转义其他情况下的双引号
+const questionsDic = JSON.parse(JSON.stringify(ansArray[name]).replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
+
+console.log(typeof(questionsDic),questionsDic);
 
 var questionNum = document.getElementsByClassName("list-item").length;
 console.log(questionNum);
@@ -26,11 +32,6 @@ console.log(questionNum);
 function autoExam() {
 try {
     if (name in ansArray){
-	  
-	// 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）,并保留这些字符不变，同时转义其他情况下的双引号
-	const questionsDic = JSON.parse(JSON.stringify(ansArray[name]).replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
-	
-	console.log(typeof(questionsDic),questionsDic);
 	
 	console.log(name + "  开始答题...");
 	var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
