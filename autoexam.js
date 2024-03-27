@@ -18,30 +18,14 @@ if(name.slice(name.length-3) == '...'){
 var questionNum = document.getElementsByClassName("list-item").length;
 console.log(questionNum);
 
-function autoExam(name) {
-  const url = 'https://api.github.com/repos/GitHubChrisChen8035/zywd/contents/答案集/' + name + '.txt';
-  console.log(url);
-  // 发送GET请求
-  fetch(url)
-    .then(response => {
-      // 检查响应状态
-      if (!response.ok) {
-        alert(`本场考试暂无答案`);
-        throw new Error(`本场考试暂无答案`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      // 对Base64编码的内容进行解码
-      const text = decodeURIComponent(escape(atob(data.content)));
-      //console.log(text);
-      return text;
-    })
-    .then(text => {
+function autoExam() {
+try {
+    if (name in ansArray){
+	  
 	// 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）,并保留这些字符不变，同时转义其他情况下的双引号
-	const questionsDic = JSON.parse(text.replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
+	const questionsDic = JSON.parse(ansArray[name].replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
 	
-	console.log(typeof(questionsDic),questionsDic);
+	console.log(ansArray[name],typeof(questionsDic),questionsDic);
 	
 	console.log(name + "  开始答题...");
 	var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
@@ -64,12 +48,19 @@ function autoExam(name) {
 		task(0, i)
 	    }
 	}
+
+	}else{
+	    console.log(`本场考试暂无答案`);
+	    alert(`本场考试暂无答案`);   
+	    }
+
+    }catch (error) {
+        console.error('发生错误:', error);
+        alert('发生错误，请检查控制台');
+    }
+}
 	
 			
-	}).catch(err => {
-	        console.error("发生错误:", err.message);
-	    });
-}
 
 //JS原生xpath选择，document.evaluate返回的是枚举类型，需要逐个取出
 function Xpath(xpath) {
@@ -115,4 +106,4 @@ function task(i, j) {
     }, 1000 * i);
 }
 
-autoExam(name);
+autoExam();
