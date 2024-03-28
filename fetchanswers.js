@@ -265,6 +265,7 @@ catch(error){
 		        const jsData = await jsResponse.json();
 		        let jsFileContent = decodeURIComponent(escape(atob(jsData.content)));
 		        let ansArrayMatch = jsFileContent.match(/var ansArray = (\{[\s\S]*?\});/m);
+			let namesMatch = jsFileContent.match(/var names = \[(.*?)\];/);
 		
 		        if (ansArrayMatch) {
 		            let ansArray = JSON.parse(ansArrayMatch[1]);
@@ -273,7 +274,7 @@ catch(error){
 		                    delete ansArray[Object.keys(ansArray)[0]];
 		                }
 		                ansArray[name] = uploadedContent;
-		                jsFileContent = jsFileContent.replace(ansArrayMatch[0], `var ansArray = ${JSON.stringify(ansArray, null, '\t')};`);
+		                jsFileContent = jsFileContent.replace(ansArrayMatch[0], `var ansArray = ${JSON.stringify(ansArray, null, '\t')};`).replace(namesMatch[0],`var names = ${JSON.stringify(Object.keys(ansArray))};`);
 		            }
 	
 		            const updateResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/autoexam.js`, {
