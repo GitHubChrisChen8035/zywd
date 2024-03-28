@@ -17,11 +17,8 @@ if(name.slice(name.length-3) == '...'){
 
 //var name = "宁波移动员工网信安全考试";
 console.log(name,names.includes(name));
-
-// 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）,并保留这些字符不变，同时转义其他情况下的双引号
-var questionsDic = JSON.parse(JSON.stringify(ansArray[name]).replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
-
-console.log(typeof(questionsDic),questionsDic);
+//定义但不赋值，undefined
+var questionDic;
 
 var questionNum = document.getElementsByClassName("list-item").length;
 console.log(questionNum);
@@ -29,8 +26,13 @@ console.log(questionNum);
 function autoExam() {
 try {
     if (names.includes(name)) {
-	
+	    
 	console.log(name + "  开始答题...");
+	    
+	// 正则表达式用于匹配不需要转义的双引号前后的特定字符（{, :, [, }, ,]）,并保留这些字符不变，同时转义其他情况下的双引号
+	var questionsDic = JSON.parse(JSON.stringify(ansArray[name]).replace(/(?<![{,:[\]])"(?![,:}\]])/g, '\\"').replace(/\n/g, ""));
+	console.log(typeof(questionsDic),questionsDic);
+
 	var auth = "Bearer__" + JSON.parse(localStorage.getItem("token"))["access_token"];
 	//console.log(auth);
 	var req = new XMLHttpRequest();
