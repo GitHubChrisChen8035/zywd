@@ -622,7 +622,7 @@ if(name.slice(name.length-3) == '...'){
 //var name = "宁波移动员工网信安全考试";
 console.log(name,names.includes(name));
 //定义但不赋值，undefined
-var questionDic;
+var questionsDic;
 
 var questionNum = document.getElementsByClassName("list-item").length;
 console.log(questionNum);
